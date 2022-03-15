@@ -52,4 +52,22 @@ public class ContactController {
 		}
 		return null;
 	}
+	
+	@PreAuthorize("permitAll()")
+	@PostMapping("/contacts/{username}/{contactName}/{increase}")
+	public ResponseEntity <?> increaseUnread(@PathVariable String username, @PathVariable String contactName, @PathVariable int increase) {
+		User user = userDetailsService.findOne(username);
+		List <Contact> contacts = user.getContacts();
+		for(Contact contact: contacts) {
+			if(contact.getUsername().equals(contactName)) {
+				if(increase == 1) 
+					contact.setUnread(contact.getUnread() + 1);
+				else
+					contact.setUnread(0);
+			}
+		}
+		user.setContacts(contacts);
+		userDao.save(user);
+		return null;
+	}
 }
