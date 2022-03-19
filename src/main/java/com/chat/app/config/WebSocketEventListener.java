@@ -17,7 +17,7 @@ public class WebSocketEventListener {
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
     	StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        String username = (String) headerAccessor.getSessionAttributes().get("username");
+        String username = (String) headerAccessor.getSessionAttributes().get("id");
         if(username != null) {
         	messagingTemplate.convertAndSendToUser(username, "/queue/messages", new ChatNotification("LEAVE", username, null));
         }
